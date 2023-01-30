@@ -122,6 +122,7 @@ The configuration file for which registries Podman can access is located at `/et
     ```
 
     ???+ "Sample Output"
+    
     ```text
     ➜  ~ podman pull docker.io/library/httpd:latest
     Trying to pull docker.io/library/httpd:latest...
