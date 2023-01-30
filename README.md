@@ -122,20 +122,20 @@ The configuration file for which registries Podman can access is located at `/et
     ```
 
     ???+ "Sample Output"
-        ```text
-        ➜  ~ podman pull docker.io/library/httpd:latest
-        Trying to pull docker.io/library/httpd:latest...
-        Getting image source signatures
-        Copying blob sha256:8b4456c99d44e5fe2c92964f70d5269a73f22c61faf38da998c04a7257f9edb5
-        Copying blob sha256:8740c948ffd4c816ea7ca963f99ca52f4788baa23f228da9581a9ea2edd3fcd7
-        Copying blob sha256:70698c6571492984b65669f6a9aab3cee5bcdf0ce384c92925c5b060a8d5c159
-        Copying blob sha256:00df859677557e9b413f7aaee7659a40c08505ecc329d9e48e3d1dac8d3bd00b
-        Copying blob sha256:ec2ee6bdcb5804a778b9a7e89520625053b034db3ef841a7c279b52346420a98
-        Copying config sha256:6e794a4832588ca05865700da59a3d333e7daaaf0544619e7f326eed7e72c903
-        Writing manifest to image destination
-        Storing signatures
-        6e794a4832588ca05865700da59a3d333e7daaaf0544619e7f326eed7e72c903
-        ```
+    ```text
+    ➜  ~ podman pull docker.io/library/httpd:latest
+    Trying to pull docker.io/library/httpd:latest...
+    Getting image source signatures
+    Copying blob sha256:8b4456c99d44e5fe2c92964f70d5269a73f22c61faf38da998c04a7257f9edb5
+    Copying blob sha256:8740c948ffd4c816ea7ca963f99ca52f4788baa23f228da9581a9ea2edd3fcd7
+    Copying blob sha256:70698c6571492984b65669f6a9aab3cee5bcdf0ce384c92925c5b060a8d5c159
+    Copying blob sha256:00df859677557e9b413f7aaee7659a40c08505ecc329d9e48e3d1dac8d3bd00b
+    Copying blob sha256:ec2ee6bdcb5804a778b9a7e89520625053b034db3ef841a7c279b52346420a98
+    Copying config sha256:6e794a4832588ca05865700da59a3d333e7daaaf0544619e7f326eed7e72c903
+    Writing manifest to image destination
+    Storing signatures
+    6e794a4832588ca05865700da59a3d333e7daaaf0544619e7f326eed7e72c903
+    ```
 
 <!--- run it as it comes
 use it in a new Dockerfile - add 
