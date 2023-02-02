@@ -1,0 +1,153 @@
+
+/* FACETS */
+
+#search-facets {
+	margin-top:20px;
+}
+
+#solrstrap-facets ul { list-style:none; padding:8px 0 10px 0; }
+#solrstrap-facets li { font-size: 0.75rem; color: #777; line-height: 1.25; margin-bottom: 0.5rem; }
+#solrstrap-facets a, #solrstrap-facets a:visited, #solrstrap-facets a:hover { color: #0f4f7e; font-weight:700; }
+#solrstrap-facets a:hover { text-decoration: underline; }
+
+#solrstrap-facets .facetSearchOpenIcon {
+	background: url("/common/commonspot/customcf/search/images/ic_search.png") no-repeat scroll 0 0 transparent;
+	float: right;
+	height: 12px;
+	margin-right: 4px;
+	margin-top:-17px;
+	width: 10px;
+	cursor: pointer;
+}
+
+#solrstrap-facets .facetSearchArea {
+	background-color: #ededed;
+	width: 100%;
+	display: block;
+}
+
+#solrstrap-facets .facetSearchArea input {
+	font-size:80%;
+	width: 90%;
+	margin: 0 3px 5px 5px;
+
+}
+
+#solrstrap-facets .facetSearchCloseIcon {
+	display:inline;
+	font-size:80%;
+	cursor: pointer;
+}
+
+#solrstrap-facets li.limitMore {
+	background: transparent url("/common/commonspot/customcf/search/images/icon_sprite.png") no-repeat scroll 0 0;
+	height: 15px;
+	padding-left: 19px;
+	overflow: hidden;
+	position: relative;
+	vertical-align: text-bottom;
+	margin-top:5px;
+}
+
+#search-facets div.nav-title {
+    background-color: #ededed;
+    width: 100%;
+    display: block;
+    padding: 0 0 0 10px;
+    margin: 10px 0 0 0;
+    font-size: 0.875rem;
+}
+
+.dateRangeField {
+	background: #fff; 
+	cursor: pointer; 
+	margin-bottom:15px;  
+	padding: 5px 10px; 
+	border: 1px solid #ccc; 
+	width: 100%; 
+	font-size: 0.875rem; 
+	margin-top:5px; 
+	border-radius: 5px;
+}
+
+.subtitleMsg {
+	padding: 10px 4px 10px 0px;
+	color: #767676;
+	font-size: 16px;
+}
+
+.subtitleMsg  p {
+	margin-top: 0em;
+	margin-bottom: .9em;
+}
+
+/* RESULTS */
+
+#noResultsMsg {
+	padding-top:22px;
+	padding-bottom:40px;		
+	font-size:15px;
+	text-align:center;
+	color:#4E483E;
+}
+
+#searchingMsg {
+	padding-bottom:40px;
+	font-size:15px;
+	text-align:center;
+	padding-top:22px;
+	color:#4E483E;
+}
+
+.ListingMeta ul {
+	list-style: none;
+}
+
+.ListingMeta span {
+	font-weight: bold;
+}
+
+.entry:not(:first-child),
+.entry:not([offset="0"])
+  { border-top: 1px solid #ddd; padding-top:30px; margin-bottom:10px; }
+
+.resultAreaHelperMsg {
+	/*border-bottom:1px solid #D8D8D8;*/
+	padding:15px 20px 10px 20px;
+	margin: 0px 25px 5px 0px;
+	color:#767676;
+	font-size:11px;
+}
+
+/* SEARCH BOX */
+
+.search-form {
+	height:70px;
+	margin:0 auto;
+	margin-bottom:13px;    
+	border-bottom:1px solid #d8d8d8;
+	padding-bottom:10px;
+	margin-top:-20px;
+	text-align: center;
+}
+
+.search-form form input[type=text] {
+	border: 2px solid #D8D8D8;
+	padding-left: 8px;
+	width:80%;
+	height:36px;
+	margin-top:20px;
+	font:15px Arial, Helvetica, sans-serif; line-height: 1.5em; color:#777777;
+}
+
+.search-form form input[type=submit] {
+	background: transparent url("/common/commonspot/customcf/search/images/search_button.gif") no-repeat;
+	cursor:pointer;
+	width: 42px;
+	height: 40px;
+	text-indent: -1000em;
+}
+
+.search-form form label {
+    display:none;
+}

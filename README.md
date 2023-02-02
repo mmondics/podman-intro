@@ -138,7 +138,56 @@ The configuration file for which registries Podman can access is located at `/et
     6e794a4832588ca05865700da59a3d333e7daaaf0544619e7f326eed7e72c903
     ```
 
-<!--- run it as it comes
+    You now have the httpd container image stored locally.
+
+3. Show the local copy of the httpd image.
+
+    ```text
+    podman images
+    ```
+
+    Sample Output: 
+
+    ```text
+    ➜  ~ podman images
+    REPOSITORY               TAG         IMAGE ID      CREATED      SIZE
+    docker.io/library/httpd  latest      6e794a483258  12 days ago  149 MB
+    ```
+
+4. View detailed information about the container image with `podman inspect`
+
+    ```text
+    podman inspect docker.io/library/httpd:latest
+    ```
+
+    You could also use the `IMAGE ID`, or a unique subset of the Image ID, instead of the full image name.
+
+    For example, in the example above.
+
+    `podman inspect 6e7` would have the same output, as there are no other container images with an ID that begins with `6e7`.
+
+## Running a Container
+
+Now that you have a container image stored locally, the next step is to run it as a container.
+
+5. Run the container with the following command.
+
+    ```text
+    podman run -name httpd -d -p 8080:80 docker.io/library/httpd:latest
+    ```
+
+    This command has various optional flags added.
+
+    - `-name`: specifies the name for the container. Omitting this tag would result in Podman generating a random name for the container. 
+    - `-d`: runs the container in "detached" mode, meaning it will run in the background and you will be given back access to your terminal session.
+    - `-p`: port-forwards from the localhost to the container host. In this case, Podman maps `localhost:8080` to the container port `80` where you can access the httpd web server.
+
+    Finally, you specify the container image which you would like to run. Again, you could have instead used the unique Image ID rather than the full name. 
+
+    You also could have immedietely executed this `podman run` command without first executing the `podman pull`. Podman would have pulled the container image automatically from a container registry if it was not found locally.
+
+6. 
+
 use it in a new Dockerfile - add 
 add index.html to serve the webpage
 run it locally

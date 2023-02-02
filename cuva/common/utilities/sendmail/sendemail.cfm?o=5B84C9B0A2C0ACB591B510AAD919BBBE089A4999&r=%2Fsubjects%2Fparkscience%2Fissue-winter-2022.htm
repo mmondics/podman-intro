@@ -1,0 +1,383 @@
+ 
+    <html>
+      <head>
+        <link href="/common/commonspot/templates/assets/css/main.min.css?v=20230112" rel="stylesheet">
+        <script type="text/javascript" src="/common/commonspot/ADF/thirdParty/jquery/jquery-1.12.js"></script>
+        <script type="text/javascript" src="/commonspot/javascript/util.js"></script>
+        <script type="text/javascript" src="/common/commonspot/templates/js/global.js?v=20230112"></script>
+		
+        
+        <script src='/common/commonspot/templates/js/federated-analytics-uav1.js?ver=true&agency=DOI&subagency=NPS&exts=rtf,odt,ods,odp&dclink=true&enhlink=true' id='_fed_an_ua_tag'></script>
+
+        <script>
+          jQuery(document).ready(function () {		
+
+            notifyParentHeight();
+
+            trapFocus();
+
+            jQuery("#contactUsBtnExit").click(function() {
+              jQuery("#modalform #submitted").val("n");
+              window.parent.closeContactModal();
+            });
+            
+            jQuery(document).keyup(function(event) {
+              // is the key pressed the esc key (27)? Is the "No Thanks" button focused and the enter key (13) pressed?
+              if (event.which == 27 || (jQuery('.closelink').is(":focus") && event.which == 13)) {
+                // the escape key has been pressed, send the message to close the modal
+                jQuery("#modalform #submitted").val("n");
+                window.parent.closeContactModal();
+              }
+            });
+
+            //focus on the first field
+            jQuery("#formMail ").find('*').filter(':input:visible:first').focus();
+
+              jQuery("#btnSubmit").click(function(ev){
+                
+                ev.preventDefault(); //prevent the body of main page from submitting
+
+                // BEGIN CLIENT SIDE VALIDATION
+
+                jQuery('#modalForm div').removeClass('has-error'); //clear old messages
+
+                var okToSubmit = true;
+                var errors = new Array();
+
+                
+
+                  if ( jQuery('#email').val().length == 0 ) {
+                  errors.push( "Email is required" );
+                  jQuery('#email').parent().addClass('has-error');
+                } else if ( !isEmail( jQuery('#email').val() ) ) {
+                  errors.push( "Please enter a valid email address" );
+                  jQuery('#email').parent().addClass('has-error');
+                }
+
+                if ( jQuery('#category').val() == null || jQuery('#category').val().length == 0 ) {
+                  errors.push( "Category is required" );
+                  jQuery('#category').parent().addClass('has-error');
+                }
+
+                if ( jQuery('#message').val().length == 0 ) {
+                  errors.push( "Please enter a message" );
+                  jQuery('#message').parent().addClass('has-error');
+                } else if ( jQuery('#message').val().length > 8000 ) {
+                  errors.push( "Maximum message length is 8000 characters" );
+                  jQuery('#message').parent().addClass('has-error');
+                }
+
+              
+
+              // END CLIENT SIDE VALIDATION
+
+              if ( errors.length != 0 ) {
+
+                showErrors(errors);
+
+              } else {
+
+                //if we reach this point, we've decided to submit our form
+
+                //prevent duplicate submission by disabling the submit button
+                disableSubmit();
+                
+                //fire google analytics event
+                ga('GSA_ENOR0.send', 'event', { eventCategory: 'Email', eventAction: 'parkscience', eventLabel: '/subjects/parkscience/issue-winter-2022.htm'});
+                jQuery('#formMail').submit();
+              }
+                  return false;
+              }); //end of submit button handler
+
+          });
+
+          function isEmail(email) {
+            var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            return regex.test(email);
+          }
+
+          function disableSubmit() {
+            jQuery('#btnSubmit').attr("disabled", true);
+            jQuery('#btnSubmit').html("Submitting...");
+            jQuery("#loading-indicator").show();
+          }
+
+          function enableSubmit() {
+            jQuery("#loading-indicator").hide();
+                jQuery('#btnSubmit').attr("disabled", false);
+            jQuery('#btnSubmit').html("Submit");
+          }
+
+          function showErrors(errors) {
+
+            //accepts an array of errors and outputs them in the error section
+            
+            //first modify the <ul> that contains errors by clearing it and adding our errors 
+            var errorStr="";
+            for (var i=0; i<errors.length; i++) {
+              if (errors[i] == "serverCaughtError") {
+                errorStr+="<li>We are having an issue with our contact us form that will be resolved shortly.  Please try again later today.</li>";
+              } else {
+                errorStr+="<li>"+errors[i]+"</li>";
+              }
+            }
+            jQuery("#errorList").empty().append(errorStr);
+
+            //show errors and focus
+            jQuery("#modalError").show().focus();
+
+            //the height of our content has changed, and iPhone Safari doesn't handle it right, so notify the container
+            notifyParentHeight();
+
+            //enable tabbable error items so trapFocus picks it up
+            jQuery("#modalError").attr("disabled",false);
+            jQuery("#modalError button.errorClose").attr("disabled",false);
+
+            //retrap focus because new tabbable divs are showing
+            trapFocus();
+
+          }
+
+          function hideErrors(){
+
+            jQuery('#modalError').hide();
+
+            //disable tabbable error items so trapFocus doesnt pick these up
+            jQuery("#modalError").attr("disabled",true);
+            jQuery("#modalError button.errorClose").attr("disabled",true);
+
+            //retrap focus because less tabbable divs are showing
+            trapFocus();
+
+          }
+
+          function notifyParentHeight() {
+
+            //the modal height needs manipulation since we use iFrame.  at one point we thought iOS only, but doing globally now.
+
+            //var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            if(true) {
+              var modalScrollHeight=Math.max(
+                          document.body.scrollHeight, document.documentElement.scrollHeight,
+                          document.body.offsetHeight, document.documentElement.offsetHeight,
+                          document.body.clientHeight, document.documentElement.clientHeight
+                      ) + 15;
+                      if (window.parent.fixContactModalHeight) {
+                        window.parent.fixContactModalHeight(modalScrollHeight);	
+                      } 
+            }
+
+          }
+
+          function trapFocus() {
+
+            //this traps the focus to the modal window to restrict tabbing within this window (for screen readers)
+
+            var element = document.getElementById("contactModalContainer");
+
+            var focusableEls = element.querySelectorAll('a[href]:not([disabled],[tabindex="-1"]), button:not([disabled],[tabindex="-1"]), textarea:not([disabled],[tabindex="-1"]), input[type="text"]:not([disabled],[tabindex="-1"]), input[type="email"]:not([disabled],[tabindex="-1"]), input[type="radio"]:not([disabled],[tabindex="-1"]), input[type="checkbox"]:not([disabled],[tabindex="-1"]), select:not([disabled],[tabindex="-1"]), div[tabindex]:not([disabled],[tabindex="-1"])');
+
+            firstFocusableEl = focusableEls[0];  
+            lastFocusableEl = focusableEls[focusableEls.length - 1];
+
+            var KEYCODE_TAB = 9;
+
+            element.addEventListener('keydown', function(e) {
+
+              var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
+
+              if (!isTabPressed) { 
+                return; 
+              }
+
+              if ( e.shiftKey )  { //shift + tab
+                if (document.activeElement === firstFocusableEl) {
+                  lastFocusableEl.focus();
+                  e.preventDefault();
+                }
+              } else { //tab
+                if (document.activeElement === lastFocusableEl) {
+                  firstFocusableEl.focus();
+                  e.preventDefault();
+                }
+              }
+            });
+          }
+
+        </script>
+
+        <style>
+          div.hp {
+            display: none;
+          }
+          #loading-indicator {
+            margin-bottom: 10px;
+            margin-right:10px;
+            display:none;
+          }
+          #modalError {
+            display: none;
+            padding:0px 15px 0px 15px;
+          }
+          #modalError p {
+            font-weight: bold;
+          }
+          #modalSuccess {
+            padding:0px 15px 0px 15px;
+          }
+          #contactSuccess {
+            background-color:#4b5e26;
+          }
+          #errorList {
+            list-style: circle;
+          }
+          .modal-header {
+            padding:0px;
+          }
+          .btn-success {
+            background-color: #5e7630;
+          }
+          .modal-body {
+            padding:10 0px 0px 0px !important;
+          }
+          #btnSubmit, #contactUsBtnExit {
+            margin-bottom: 10px;
+          }
+          button.errorClose {
+            padding:0;
+            cursor:pointer;
+            background: 0 0;
+            border:0;
+          }
+          .errorClose {
+            float:right;
+            font-size:21px;
+            font-weight:700;
+            line-height:1;
+            color:#000;
+            text-shadow: 0 1px 0 #FFF;
+            opacity: .2;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="interior-modal" id="contactModalContainer">
+
+          
+            <h1 class="modal-title">Contact Us</h1>
+            <h2>If You Send Us Email</h2>
+            <p>You can contact us by email using this form. We may be better able to respond to your question or request if you provide us with your contact information. Please be aware that we may forward your email to other government employees or authorized concessioners who may be better able to assist you. Except for authorized law enforcement investigations, we do not share your information with any outside organizations.</p>
+          
+
+          <div id="modalError" tabindex="1" aria-label="Submission Error Messages" disabled="true">
+            <div class="alert alert-error bg-danger">
+              <button type="button" class="errorClose" onclick="hideErrors();" tabindex="2" aria-label="Close Submission Errors"  disabled="true">x</button>
+              
+              <p>Please correct the following errors with your submission:</p>
+              <ul id="errorList">
+                
+              </ul>
+            </div>	
+          </div>		
+
+          <div id="modalForm">
+            <form role="form" name="formMail" id="formMail" method="post"> 
+              <input type="hidden" name="hpt" id="hpt" value="1AD38CEFC586F9EFC3E847F7AF">					
+              <input type="hidden" name="type" value="contact">
+              <input type="hidden" name="submitted" id="submitted" value="y">
+              <input type="hidden" name="r" value="%2Fsubjects%2Fparkscience%2Fissue%2Dwinter%2D2022%2Ehtm">					
+              
+              <div class="mb-3">
+                <label class="required"></label>Required information
+              </div>
+
+              
+              
+                <input type="hidden" name="o" value="5B84C9B0A2C0ACB591B510AAD919BBBE089A4999">
+
+                <div class="mb-3">
+                  <label class="required form-label" for="email">Email address</label>
+                  <input value="" tabindex="3" type="email" class="form-control" id="email" name="email" placeholder="example@email.com" size="30" maxlength="250" aria-required="true">
+                </div>
+
+                <div class="mb-3">
+                  <label for="Subject" class="form-label">Subject of your email</label>
+                  <input value="" tabindex="4"  type="text" class="form-control" id="Subject" name="subject">
+                </div>
+
+                <div class="mb-3">
+                  <label class="required form-label" for="category">Category</label>
+                  <select class="form-select form-category" tabindex="5" id="category" name="category">
+                    <option selected disabled hidden style='display: none' value=''></option>
+                    
+                    <option value="Accessibility">Accessibility</option>
+                    <option value="Digital Experience">Digital Experience</option>
+                    <option value="Facilities">Facilities</option>
+                    <option value="Information">Information</option>
+                    <option value="Permits">Permits</option>
+                    <option value="Programs">Programs</option>
+                    <option value="Safety">Safety</option>
+                    <option value="User Fees">User Fees</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <h3>Address</label>
+                <p class="form-text">(An address is needed only if requesting information be mailed)</p>
+
+                <div class="mb-3">
+                  <label for="fullname" class="visually-hidden">Full name</label>
+                  <input value="" tabindex="6" type="text" class="form-control input-sm" name="fullname" id="fullname" placeholder="Full name" >
+                </div>
+
+                <div class="mb-3">
+                  <label for="address1" class="visually-hidden">Address Line 1</label>
+                  <input value="" tabindex="7"  type="text" class="form-control input-sm" size="30" maxlength="250" name="address1" id="address1" placeholder="Address Line 1" >
+                </div>
+
+                <div class="mb-3">
+                  <label for="address2" class="visually-hidden">Address Line 2</label>
+                  <input value=""  tabindex="8"  type="text" class="form-control input-sm" size="30" maxlength="250" name="address2" id="address2" placeholder="Address Line 2" >
+                </div>
+
+                <div class="mb-3">
+                  <label for="city" class="visually-hidden">City</label>
+                  <input value=""  tabindex="9"  type="text" class="form-control input-sm" size="20" maxlength="250" name="city" id="city" placeholder="City" >
+                </div>
+
+                <div class="mb-3">
+                  <label for="state" class="visually-hidden">State/Province/Region</label>
+                  <input value="" tabindex="10"  type="text" class="form-control input-sm" size="10" maxlength="250" name="state" id="state" placeholder="State/Province/Region" >
+                </div>
+
+                <div class="mb-3">
+                  <label for="zip" class="visually-hidden">Zip/Postal code</label>
+                  <input value=""  tabindex="11" type="text" class="form-control input-sm" size="15" maxlength="250"  name="zip" id="zip" placeholder="Zip/Postal code" >
+                </div>
+
+                <div class="mb-3">
+                  <label for="country" class="visually-hidden">Country</label>
+                  <input value=""  tabindex="12" type="text" class="form-control input-sm" size="30" maxlength="250" name="country" id="country" placeholder="Country" >
+                </div>
+
+                
+                
+                <div class="mb-3">
+                  <label class="required form-label" for="message">Your Message</label>
+                  <textarea tabindex="13" class="form-control" rows="3" name="message" id="message"  placeholder="Type your message here"></textarea>
+                </div>
+              
+
+              <div class="float-end" style="clear:both">
+                <img src="/common/commonspot/templates/assets/img/chrome/ajax-loader.gif" id="loading-indicator"  />
+                <button tabindex="14" type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>              
+                <button tabindex="15" id="contactUsBtnExit" class="btn btn-default">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          
+        </div>
+      </body>
+    </html>
+  

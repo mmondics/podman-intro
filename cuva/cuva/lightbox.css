@@ -1,0 +1,164 @@
+.drag { 
+	cursor: move;
+}
+.lightboxContainer {
+	position: absolute !important;
+	font-family: Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 11px;
+}
+
+.lightboxContainer .iframeContainer {
+	background-color: #FFFFFF;
+	padding-left: 10px;
+	padding-bottom: 2px;
+	border-left: 1px solid #9C8C8C;
+	border-right: 1px solid #9C8C8C;
+	
+}
+
+.lightboxContainer .lightboxBottomCorner {
+	margin-top: -5px;
+}
+
+.lightboxContainer body,.lightboxContainer div,.lightboxContainer dl,.lightboxContainer dt,.lightboxContainer dd,.lightboxContainer ul,.lightboxContainer ol,.lightboxContainer li,.lightboxContainer h1,.lightboxContainer h2,.lightboxContainer h3,.lightboxContainer h4,.lightboxContainer h5,.lightboxContainer h6,.lightboxContainer pre,.lightboxContainer form,.lightboxContainer fieldset,.lightboxContainer input,.lightboxContainer p,.lightboxContainer blockquote,.lightboxContainer th,.lightboxContainer td {
+	margin:0;
+	padding:0;
+	color: black !important;
+}
+
+.lightboxContainer .lightboxHeader {
+	background-color: #FFFFFF !important;
+	cursor: move;
+	border-left: 1px solid #9C8C8C;	
+	border-right: 1px solid #9C8C8C;	
+	/*width: 100%;*/
+	max-height: 120px; /* Used instead of 'height: 40px' to accommodate larger subtitles. */
+}
+
+.lightboxContainer .lightboxHeader .lightboxCloseIcon {
+	margin-right: 12px;
+	padding-right: 0px;
+}
+
+/* Dialog's title */
+.lightboxContainer .lightboxHeader h1 {
+	color: #013466 !important;
+	font-size: 18px !important;
+	font-weight: bold !important;
+	font-family: Verdana, Arial, Helvetica, sans-serif !important;
+	background-color: #FFFFFF !important
+}
+
+/* Dialog's subtitle */
+.lightboxContainer .lightboxHeader h2 {
+	font-size: 1em !important;
+	font-weight: normal !important;
+	font-family: Verdana, Arial, Helvetica, sans-serif !important;
+}
+
+.lightboxContainer .lightboxHeader img {
+	cursor: pointer;
+	padding-right: 4px;
+	margin-top: 4px !important;
+/*	visibility: hidden;*/
+}
+
+/* Top icons container */
+.lightboxContainer .lightboxIconsContainer {
+	background-color: #FFFFFF;
+	position: relative;
+	float: right;
+	padding-top: 3px;
+	margin-top: 3px;
+}
+.lightboxContainer .QAIconsContainer {
+	background-color: #FFFFFF;
+	float: right;
+	right: 80px;
+	margin-top: 3px;
+	padding-top: 3px;
+}
+.lightboxContainer .QAIconsContainer span img {
+	float: right;
+}
+.statusMsg {
+	margin-right: 4px;
+	margin-top:0px;
+	font-size:13px;
+}
+.qaIconClass,.statusIconClass,.statusMsg,.docIconClass,.reportIconClass{
+	visibility: visible !important; 
+	float: left;
+}
+
+.lightboxContainer .lightboxIframe {
+	visibility: hidden;
+}
+
+.lightboxContainer .lightboxTitleContainer {
+	float: left;
+	margin-left: 10px;
+	background-color: #FFFFFF !important	
+}
+
+.lightboxContainer .lightboxSubTitleContainer {
+	margin-left: 10px;
+   margin-right: 5px;
+   float: left;
+	font-size: 11px;
+   width: 95%;
+}
+
+.lightboxContainer .lightboxTopCorner {
+	margin-bottom: -3px;
+}
+
+/* Loading message */
+.lightboxContainer .loadingLayer {
+	position: absolute;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	text-align:center;
+	color: #000000;	
+}
+
+.lightboxContainer .loadingLayer img {
+	display: block;
+	margin: auto;
+}
+
+.lightboxContainer div {
+	border: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+/* Overlay <div> */
+.lightboxOverlay {
+	background-color: #555555;
+	left: 0px;
+	position: absolute;
+	top: 0px;
+	width: 100%;
+}
+
+/* Override lightbox image visibility inside subtitle */
+.lightboxContainer .lightboxHeader .lightboxSubTitleContainer img
+{
+	visibility:visible;
+	cursor: default; 
+}
+
+/* multiple description divs needs some separation */
+.lightboxContainer .lightboxHeader .lightboxSubTitleContainer div
+{
+	margin-bottom:3px;
+}
+
+/* clone of this dlg style, w/o font size */
+.lightboxContainer .lightboxHeader .lightboxSubTitleContainer .cs_dlgError
+{
+	color: #FF0000;
+	font-weight: bold;
+}
