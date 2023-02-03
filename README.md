@@ -4,7 +4,7 @@ In this tutorial, you will walk through an introduction to Podman and learn some
 
 ## Pre-Requisites
 1. Sign up for a free [DockerHub account](https://hub.docker.com/)
-2. [Podman CLI installed](https://podman.io/getting-started/installation)
+2. Install the [Podman CLI](https://podman.io/getting-started/installation)
 
 Before diving into Podman, you must first understand the concept of containers.
 
@@ -173,20 +173,34 @@ Now that you have a container image stored locally, the next step is to run it a
 5. Run the container with the following command.
 
     ```text
-    podman run -name httpd -d -p 8080:80 docker.io/library/httpd:latest
+    podman run --name httpd -d -p 8080:80 docker.io/library/httpd:latest
     ```
 
     This command has various optional flags added.
 
     - `-name`: specifies the name for the container. Omitting this tag would result in Podman generating a random name for the container. 
     - `-d`: runs the container in "detached" mode, meaning it will run in the background and you will be given back access to your terminal session.
-    - `-p`: port-forwards from the localhost to the container host. In this case, Podman maps `localhost:8080` to the container port `80` where you can access the httpd web server.
+    - `-p`: port-forwards from the localhost to the container host. In this case, Podman maps `localhost:8080` to the container port `80` so you can access the httpd web server.
 
     Finally, you specify the container image which you would like to run. Again, you could have instead used the unique Image ID rather than the full name. 
 
     You also could have immedietely executed this `podman run` command without first executing the `podman pull`. Podman would have pulled the container image automatically from a container registry if it was not found locally.
 
-6. 
+6. In a web browser, navigate to <localhost:8080> to see your httpd service running.
+
+    ![httpd-default](images/httpd-default.png)
+
+    If you see the `It works!` message, your pod is up and running and port `80` in the pod is exposed to your localhost port `8008`.
+
+    There are many containerized applications that are pre-packaged and need no changes. However, with a web server container image like httpd, you will usually want to make modifications such as adding an `index.html` file along with associated configuration files and images required to display a webpage.
+
+7. Clone this GitHub repository which containes a files for the Cuyahoga Valley National Park website.
+
+    ```text
+    git clone https://github.com/mmondics/podman-intro
+    ```
+
+8. 
 
 use it in a new Dockerfile - add 
 add index.html to serve the webpage
