@@ -81,23 +81,23 @@ Some of the popular container registries are:
 - quay.io
 - IBM Container Regisry (icr)
 
-Container Registries often store multiple versions of the Container Image - denoted by *tags*. For example, you can look at the tags for the official `httpd` container image in DockerHub.
+Container Registries often store multiple versions of the Container Image - denoted by *tags*. For example, you can look at the tags for the official `nginx` container image in DockerHub.
 
-<https://hub.docker.com/_/httpd>
+<https://hub.docker.com/_/nginx>
 
-![httpd-tags](images/httpd-tags.png)
+![nginx-tags](images/nginx-tags.png)
 
 The images in this screenshot can be represented in the Podman CLI as follows.
 
 ```text
-docker.io/library/httpd:bullseye
+docker.io/library/nginx:stable
 ```
 
 Where:
 - `docker.io` is the DockerHub container registry
 - `library` is the specific registry within DockerHub. In this case, this is an official image hosted by DockerHub itself.
-- `httpd` is the container image name
-- `bullseye` is the tag.
+- `nginx` is the container image name
+- `stable` is the tag.
 
 1. Your first hands-on step of this tutorial will be to log in to DockerHub via the command line.
 
@@ -115,32 +115,33 @@ Pulling Container Images to your local machine (or whichever machine you are run
 
 The configuration file for which registries Podman can access is located at `/etc/containers/registries.conf`. Note that while Podman supports Mac and Windows, on these operating systems it embeds a guest Linux system to launch your containers. This guest is referred to as a Podman machine and is managed with the `podman machine` command. On Mac and Windows, you can check the `registries.conf` file with the command `podman machine ssh cat /etc/conftainers/registries.conf`.
 
-2. Pull the official httpd Container Image to your local machine.
+2. Pull the official Nginx Container Image to your local machine.
 
     ```text
-    podman pull docker.io/library/httpd:latest
+    podman pull docker.io/library/nginx:latest
     ```
 
     Sample Output:
 
     ```text
-    ➜  ~ podman pull docker.io/library/httpd:latest
-    Trying to pull docker.io/library/httpd:latest...
+    ➜  ~ podman pull docker.io/library/nginx:latest
+    Trying to pull docker.io/library/nginx:latest...
     Getting image source signatures
-    Copying blob sha256:8b4456c99d44e5fe2c92964f70d5269a73f22c61faf38da998c04a7257f9edb5
+    Copying blob sha256:b2fe3577faa434a4ca212810cb5d245ab0923d078b44d17f9e26609772f655bf
     Copying blob sha256:8740c948ffd4c816ea7ca963f99ca52f4788baa23f228da9581a9ea2edd3fcd7
-    Copying blob sha256:70698c6571492984b65669f6a9aab3cee5bcdf0ce384c92925c5b060a8d5c159
-    Copying blob sha256:00df859677557e9b413f7aaee7659a40c08505ecc329d9e48e3d1dac8d3bd00b
-    Copying blob sha256:ec2ee6bdcb5804a778b9a7e89520625053b034db3ef841a7c279b52346420a98
-    Copying config sha256:6e794a4832588ca05865700da59a3d333e7daaaf0544619e7f326eed7e72c903
+    Copying blob sha256:d2c0556a17c5d136fc0387f936672d6922c0ee0c412e39f10bdb9abea3790815
+    Copying blob sha256:c8b9881f2c6a7c0a4b133402af9b73c6d7f481ac9b455f6f96e6181f12a8a78a
+    Copying blob sha256:693c3ffa8f43a3ae70d512c7add694b6c66a3d69262c4433acd3e0aa6d0d8b8b
+    Copying blob sha256:8316c5e80e6d3abc453220bd5858bb7bd5ac08d8b79a13378b500d6e70f91c1d
+    Copying config sha256:a99a39d070bfd1cb60fe65c45dea3a33764dc00a9546bf8dc46cb5a11b1b50e9
     Writing manifest to image destination
     Storing signatures
-    6e794a4832588ca05865700da59a3d333e7daaaf0544619e7f326eed7e72c903
+    a99a39d070bfd1cb60fe65c45dea3a33764dc00a9546bf8dc46cb5a11b1b50e9
     ```
 
-    You now have the httpd container image stored locally.
+    You now have the nginx container image stored locally.
 
-3. Show the local copy of the httpd image.
+3. Show the local copy of the nginx image.
 
     ```text
     podman images
@@ -151,20 +152,20 @@ The configuration file for which registries Podman can access is located at `/et
     ```text
     ➜  ~ podman images
     REPOSITORY               TAG         IMAGE ID      CREATED      SIZE
-    docker.io/library/httpd  latest      6e794a483258  12 days ago  149 MB
+    docker.io/library/nginx  latest      a99a39d070bf  3 weeks ago  146 MB
     ```
 
 4. View detailed information about the container image with `podman inspect`
 
     ```text
-    podman inspect docker.io/library/httpd:latest
+    podman inspect docker.io/library/nginx:latest
     ```
 
     You could also use the `IMAGE ID`, or a unique subset of the Image ID, instead of the full image name.
 
     For example, in the example above.
 
-    `podman inspect 6e7` would have the same output, as there are no other container images with an ID that begins with `6e7`.
+    `podman inspect a99` would have the same output, as there are no other container images with an ID that begins with `a99`.
 
 ## Running a Container
 
@@ -173,26 +174,28 @@ Now that you have a container image stored locally, the next step is to run it a
 5. Run the container with the following command.
 
     ```text
-    podman run --name httpd -d -p 8080:80 docker.io/library/httpd:latest
+    podman run --name nginx -d -p 8080:80 docker.io/library/nginx:latest
     ```
 
     This command has various optional flags added.
 
     - `-name`: specifies the name for the container. Omitting this tag would result in Podman generating a random name for the container. 
     - `-d`: runs the container in "detached" mode, meaning it will run in the background and you will be given back access to your terminal session.
-    - `-p`: port-forwards from the localhost to the container host. In this case, Podman maps `localhost:8080` to the container port `80` so you can access the httpd web server.
+    - `-p`: port-forwards from the localhost to the container host. In this case, Podman maps `localhost:8080` to the container port `80` so you can access the nginx web server.
 
     Finally, you specify the container image which you would like to run. Again, you could have instead used the unique Image ID rather than the full name. 
 
     You also could have immedietely executed this `podman run` command without first executing the `podman pull`. Podman would have pulled the container image automatically from a container registry if it was not found locally.
 
-6. In a web browser, navigate to <localhost:8080> to see your httpd service running.
+6. In a web browser, navigate to <localhost:8080> to see your nginx service running.
 
-    ![httpd-default](images/httpd-default.png)
+    ![nginx-default](images/nginx-default.png)
 
-    If you see the `It works!` message, your pod is up and running and port `80` in the pod is exposed to your localhost port `8008`.
+    If you see the `Welcome to nginx!` message, your pod is up and running and port `80` in the pod is exposed to your localhost port `8080`.
 
-    There are many containerized applications that are pre-packaged and need no changes. However, with a web server container image like httpd, you will usually want to make modifications such as adding an `index.html` file along with associated configuration files and images required to display a webpage.
+    There are many containerized applications that are pre-packaged and need no changes. However, with a web server container image like nginx, you will usually want to make modifications such as adding an `index.html` file along with associated configuration files and images required to display a webpage.
+
+## Building a New Container Image
 
 7. Clone this GitHub repository which containes a files for the Cuyahoga Valley National Park website.
 
@@ -200,10 +203,370 @@ Now that you have a container image stored locally, the next step is to run it a
     git clone https://github.com/mmondics/podman-intro
     ```
 
-8. 
+8. Change into the `podman-intro` directory.
 
-use it in a new Dockerfile - add 
-add index.html to serve the webpage
-run it locally
-push it to dockerhub
+    ```text
+    cd podman-intro
+    ```
 
+    In this repository, you'll find a `Containerfile` and a `cuva` directory.
+
+    ```text
+    ➜  podman-intro git:(main) ls -al
+    total 80
+    drwxr-xr-x    8 mattmondics  staff    256 Feb  3 09:09 .
+    drwx------@ 263 mattmondics  staff   8416 Feb  3 09:09 ..
+    drwxr-xr-x   12 mattmondics  staff    384 Feb  3 09:09 .git
+    -rw-r--r--    1 mattmondics  staff    136 Feb  3 09:09 Containerfile
+    -rw-r--r--    1 mattmondics  staff  13014 Feb  3 09:09 README.md
+    -rw-r--r--    1 mattmondics  staff  19877 Feb  3 09:09 container-registries.drawio.png
+    drwxr-xr-x    5 mattmondics  staff    160 Feb  3 09:09 cuva
+    drwxr-xr-x    6 mattmondics  staff    192 Feb  3 09:09 images
+    ```
+
+**Containerfiles** are text files that are used to build new container images. They are an extremely flexible, reusable, and extensible way to make changes to existing "parent" container images such as a simple Linux distribution, or in the case of this tutorial, a base nginx server. Containerfiles allow their users to pull the existing parent image, make any changes necessary, and build a new customized "child" image.
+
+If you're familiar with Docker, you can think of a *Containerfile* as analagous to a *Dockerfile*. They have identical structure and use. *Containerfile* is simply the nomenclature used by OCI-compliant containerization tools including Podman.
+
+9. Open the `Containerfile` with your favorite editor (`vi`, `nano`, VSCode, TextEdit, etc.)
+
+    ```text
+    FROM nginx:latest
+
+    LABEL description='This Containerfile will customize the parent nginx container image'
+
+    LABEL website='Cuyahoga Valley National Park'
+
+    ENV THIS_IS a_variable
+
+    EXPOSE 80
+
+    COPY default.conf /etc/nginx/conf.d/
+
+    COPY ./cuva /usr/share/nginx/html/
+
+    # Below is a hacky way to do this, but helpful to represent multi-command RUN instructions.
+
+    RUN ARCH=`dpkg --print-architecture` && \
+        echo $ARCH > /tmp/container_arch && \
+        CONTAINER_ARCH=$(cat /tmp/container_arch) && \
+        sed -i "s|HOSTARCH|$CONTAINER_ARCH|g" /usr/share/nginx/html/index.html
+    ```
+
+    This Containerfile is essentially a sequential list of instructions that will be run in series to create the child container image. This is a relatively simple Containerfile with *some* of the supported instructions, which are outlined below.
+
+    - `FROM`: specifies the parent container image to build from. If the image exists locally, that image is used which avoids the need for a `podman pull`, and will speed up the process of the container image biild. If it does not exist locally, podman will look at the registries it knows about (via the configuration file mentioned earlier) and pulls it locally. You can also specify which registry to pull the parent image from by simply prepending the registry like you did earlier, i.e. `docker.io/library/nginx:latest`.
+    - LABEL: adds a key-label pair to the metadata of the child container image. These are helpful to provide information to the eventual users of the image (maintainer contacts, software versions, etc) as well as help to keep your container images organized. 
+    - ENV: sets environment variables in the child container. The variables you set with `ENV` will be visible (with the `env` command) and usable in the eventual container.
+    - EXPOSE: simply specifies the port on which the container will listen. This *does not* actually expose the port - it only adds the correct port to the image metadata. You expose the port when running the container with `podman run -p`
+    - COPY: copies files from the local directory where the Containerfile is to a target directory in the container image. Another option to do so is the `ADD` instruction which has the additional benefit of adding files from other locations (different servers or the internet) as well as unpacking `.tar` files in the target directory. Neither of these benefits are supported by the `COPY` instruction.
+    - RUN: executes the following commands within the child container image
+
+Each one of these instructions forms a new *layer* within the child image. When you pulled the parent nginx image earlier, each one of the "blobs" you saw represents one layer of the image. The layered approach that Podman uses enables rapid changes and updates without the need for the full image to be pushed and pulled. For example, if you edit only one of the instructions in the Containerfile, such as modifying the `RUN` instruction, only that blob will need to be pushed or pulled into or out of the registry the next time it's used. In the modern DevSecOps world where images are rapidly changing and evolving, this greatly increases the speed of development and also cuts down on storage requirements. 
+
+Because of this layered approach, it generally makes sense to combine `RUN` instructions into one line with `&&` operands, as in the example above.
+
+
+![container-layers](images/container-layers.png)
+
+10. Close out of the Containerfile if it's running in your terminal session.
+
+11. Build a new container image from the Containerfile.
+
+    While in the `podman-intro` directory which contains the `Containerfile`:
+
+    ```text
+    podman build -t localhost:nginx-cuva .
+    ```
+
+    In the command above, the `-t` flag is used to set the registry and image name as `localhost:nginx-cuva`, and the `.` simply says to build from the current directory. Because you did not specify a tag for the image, `latest` will be provided as the default.
+
+    Sample output:
+    ```text
+    ➜  podman-intro git:(main) ✗ podman build -t localhost/nginx-cuva .
+    STEP 1/8: FROM nginx:latest
+    STEP 2/8: LABEL description='This Containerfile will customize the parent nginx container image'
+    --> 979bc8cbba8
+    STEP 3/8: LABEL website='Cuyahoga Valley National Park'
+    --> 6bdd4cbf4ea
+    STEP 4/8: ENV THIS_IS a_variable
+    --> 6bda5bc6294
+    STEP 5/8: EXPOSE 80
+    --> b207341526c
+    STEP 6/8: COPY default.conf /etc/nginx/conf.d/
+    --> 77f482514f0
+    STEP 7/8: COPY ./cuva /usr/share/nginx/html/
+    --> d7ccfca0e02
+    STEP 8/8: RUN ARCH=`dpkg --print-architecture` &&     echo $ARCH > /tmp/container_arch &&     CONTAINER_ARCH=$(cat /tmp/container_arch) &&     sed -i "s|HOSTARCH|$CONTAINER_ARCH|g" /usr/share/nginx/html/index.html
+    COMMIT localhost:nginx-cuva
+    --> e9dc1f9df67
+    Successfully tagged localhost/localhost:nginx-cuva
+    e9dc1f9df67c0db4d4b94f41b3876baf703818bb1003aca59620d8b01b6dd0cc
+    ```
+
+    You'll notice that each instruction in the Containerfile matches a `STEP` in the output, each has its own layer (the randomly generated characters after each `STEP`), and the final child image is listed at the end with its own image ID.
+
+12. Look at your new container image.
+
+    ```text
+    podman images
+    ```
+
+    Sample output:
+
+    ```text
+    ➜  podman-intro git:(main) ✗ podman images
+    REPOSITORY               TAG         IMAGE ID      CREATED       SIZE
+    localhost/nginx-cuva     latest      d3d1292de632  11 hours ago  163 MB
+    docker.io/library/nginx  latest      a99a39d070bf  3 weeks ago   146 MB
+    ```
+
+    You can now run the child container image as a container just like you did with the parent nginx image.
+
+## Run the Customized Container Image
+
+13. If your parent nginx container is still running, stop it first. You cannot have two pods trying to use the same port on one system.
+
+    ```text
+    podman stop docker.io/library/nginx:latest
+    ```
+
+14. Run the new container image.
+
+    ```text
+    podman run -d -p 8080:80 localhost/nginx-cuva:latest
+    ```
+
+15. Navigate to <localhost:8080> in a web browser.
+
+    ![nginx-cuva](nginx-cuva.png)
+
+The entire website with all images, links, pages, etc are running in your single container. This is not the most microservices-friendly example - most organizations will have multiple containers running separate components of their application so that if one components goes down, it will be isolated to just that component and not affect the others.
+
+This container image is only running locally. If you'd like to share it with others, or run it on a server elsewhere, you can push it to a container registry.
+
+## Push the Customized Container Image to DockerHub
+
+You should still be logged into DockerHub. If you aren't, refer to the [earlier section](#container-registries). 
+
+Remember that your container image is tagged with the `localhost` registry. This needs to be modified to your target container registry - DockerHub for this tutorial.
+
+16. Re-tag the container image for DockerHub.
+
+    ```text
+    podman tag localhost/nginx-cuva:latest docker.io/your_dockerhub_username/nginx-cuva:latest
+    ```
+
+    Replace `your_github_username` with the username with which you are logged into DockerHub.
+
+17. Look at your local container images again.
+
+    ```text
+    podman images
+    ```
+
+    Sample output:
+
+    ```REPOSITORY                        TAG         IMAGE ID      CREATED       SIZE
+    localhost/nginx-cuva              latest      d3d1292de632  12 hours ago  163 MB
+    docker.io/mondicsmatt/nginx-cuva  latest      d3d1292de632  12 hours ago  163 MB
+    docker.io/library/nginx           latest      a99a39d070bf  3 weeks ago   146 MB
+    ```
+
+    Notice that the re-tagged image has the same `IMAGE ID`. Re-tagging images is simply used to move them to and from registries - but it is the idential container under the hood.
+
+18. Push the re-tagged image to your DockerHub registry.
+
+    ```text
+    podman push docker.io/your_dockerhub_username/nginx-cuva:latest
+    ```
+
+    Again, remember to change `your_dockerhub_username`.
+
+    Sample output:
+
+    ```text
+    ➜  podman-intro git:(main) ✗ podman push docker.io/mondicsmatt/nginx-cuva:latest
+    Getting image source signatures
+    Copying blob sha256:80115eeb30bc12d360f0e102c2ef98176079305e9a1f99074093e1965cd23511
+    Copying blob sha256:67a4178b7d47beb6a1f697a593bd0c6841c67eb0da00f2badefb05fd30671490
+    Copying blob sha256:7e7121bf193a9d6c7623520cdfe2c1d58da671d201ed13a21525574f8522d32d
+    Copying blob sha256:8477a329ab95b790e1d4be0ff5761a85f39a7344cb45fb8e3f35442155c05945
+    Copying blob sha256:ff1154af28db5b3a94015268111cc49d5dd3fe7370cf2e328425d3d99f12bdb8
+    Copying blob sha256:049fd3bdb25d6b2c0e821db681c0ade756f03f14a1966fb7fc17f208065dce6b
+    Copying blob sha256:957eddbb87d7e0d1a872ca5239f64f9a766bff4199eb6c2efbc70ed828c00347
+    Copying blob sha256:87db0b0441ea1d06e566fc3e4d5254def22b0158e81106926525cfab815b6e3d
+    Copying blob sha256:93e388fe3209a20dba47c994746fad7f867ffbc37299b060c01016e0f1b8c2ee
+    Copying config sha256:d3d1292de6326fbfb95937c34fbd8a55a623bfb4b046efc566aeafd236529deb
+    Writing manifest to image destination
+    Storing signatures
+    ```
+
+19. Navigate to <https://hub.docker.com/> in a web browser and log in.
+
+    ![dockerhub-registries](images/dockerhub-registries.png)
+
+    Your image is now publicly accessible in DockerHub and can be pulled into Linux servers or Kubernetes cluster.
+
+20. Click the tile for you container image to see more details.
+
+    ![dockerhub-details](images/dockerhub-details.png)
+
+## Building Multi-Architecture Container Images
+
+In the hybrid multicloud world we are now living in, there is a great benefit to developing new applications with the mentality of "Build Once, Deploy Anywhere". It is far better to develop an application one time and be able to run it on any platform - IBM zSystems, IBM Power, x86, public cloud - rather than having to re-write the application for any new architecture that is brought into an environment. 
+
+Building a multi-architecture container image, or Container Manifest, enables the following use cases for IBM zSystems:
+
+- Integrating `s390x` (Linux on IBM zSystems architecture) into DevSecOps toolchains alongside `amd64` (x86 architecture) or public cloud environments
+- Failing over from public cloud or x86 to IBM zSystems environments for disaster recovery
+- Migrating applications to different architectures for performance, sustainability, or availability purposes
+
+Podman supports builds for platform architectures different from that of the Podman host. For example, you can build an `s390x` container image from an `amd64` linux server or even your local laptop or desktop. This is particularly beneficial to developers or DevOps pipelines who don't have access to each of the target architectures for development.
+
+Building a container image for a different architecutre can be achieved by running a `podman build` with the `--platform` flag. Alternatively, the `--all-platforms` flag can be used to build for all platform architectures supported by the *parent image* in a Containerfile.
+
+While `podman build` is happy to use base images and build images for any platform that exists, `RUN` instructions in a Containerfile will not be able to succeed without the help of emulation provided by packages like `qemu-user-static`. [source and more information](https://docs.podman.io/en/latest/markdown/podman-build.1.html)
+
+[QEMU](https://www.qemu.org/) (short for Quick Emulator) is a free and open source emulator that emulators machine processors through dynamic binary translation to allow interoperability of guest operating systems. QEMU allows podman to not only *build* container images for different platforms, but also allows you to *run* different platform images.
+
+21. Install the `qemu-user-static` package onto your local podman machine.
+
+    ``text
+    podman machine ssh sudo rpm-ostree install qemu-user-static
+    ```
+
+22. Reboot your podman machine.
+
+    ```text
+    podman machine ssh sudo systemctl reboot
+    ```
+
+    Wait a minute or two for the changes to apply and for the virtual podman machine to reboot. While you wait, you can read more about the `qemu-user-static` package [here](https://github.com/multiarch/qemu-user-static).
+
+    Once Podman has rebooted, you can move on to building a `s390x` version of your container image. You can check that Podman is back up by running `podman images`. If you receive an error, the Podman machine is not back up yet.
+
+23. Use the qemu emulator to build an `s390x` version of the customized nginx container image. Remember to edit the command below to reflect `your_dockerhub_username`.
+
+    ```text
+    podman build --platform=linux/s390x -t docker.io/your_dockerhub_username/nginx-cuva:s390x
+    ```
+
+    Sample output:
+
+    ```text
+    ➜  podman-intro git:(main) ✗ podman build --platform=linux/s390x -t docker.io/mondicsmatt/nginx-cuva:s390x .
+    STEP 1/8: FROM nginx:latest
+    STEP 2/8: LABEL description='This Containerfile will customize the parent nginx container image'
+    --> b979b16dfe5
+    STEP 3/8: LABEL website='Cuyahoga Valley National Park'
+    --> 034f043c8cc
+    STEP 4/8: ENV THIS_IS a_variable
+    --> 6b824f629f8
+    STEP 5/8: EXPOSE 80
+    --> 289d3d79e57
+    STEP 6/8: COPY default.conf /etc/nginx/conf.d/
+    --> a6dbc80e75e
+    STEP 7/8: COPY ./cuva /usr/share/nginx/html/
+    --> 5158dd460e9
+    STEP 8/8: RUN ARCH=`dpkg --print-architecture` &&     echo $ARCH > /tmp/container_arch &&     CONTAINER_ARCH=$(cat /tmp/container_arch) &&     sed -i "s|HOSTARCH|$CONTAINER_ARCH|g" /usr/share/nginx/html/index.html
+    COMMIT docker.io/mondicsmatt/nginx-cuva:s390x
+    --> 67f223fd1fe
+    [Warning] one or more build args were not consumed: [TARGETARCH TARGETOS TARGETPLATFORM]
+    Successfully tagged docker.io/mondicsmatt/nginx-cuva:s390x
+    67f223fd1febef947fe4283764c858e50efcc9e1d0c4fe0c97f2965094a8a2b0
+    ```
+
+24. Run the `s390x` container image on port 8081 so it doesn't try to use the same port as your original container.
+
+    ```text
+    podman run -d -p 8081:80 docker.io/your_dockerhub_username/nginx-cuva:s390x
+    ```
+
+    Note: you might receive a warning from Podman telling you that the container architecture does not match that of the Podman host. This can be ignored.
+
+25. Navigate to <localhost:8081> in a web browser.
+
+    ![nginx-cuva-s390x](images/nginx-cuva-s390x.png)
+
+    You should notice that the webpage now displays `Cuyahoga Valley running on s390x`. This is the result of the `RUN` command identifying the container's host architecture and injecting it into the `index.html` page served by the nginx server. You're now running the container on an emulated `s390x` operating system on your laptop or desktop, but this container could be run on any Linux on IBM zSystems server as well as in z/OS Container Extensions as well as OpenShift on IBM zSystems.
+
+26. Push the s390x container image to your DockerHub repository.
+
+    ```text
+    podman push docker.io/your_dockerhub_username/nginx-cuva:s390x
+    ```
+
+27. Navigate back to your DockerHub repository in a web browser to see the pushed image.
+
+    ![dockerhub-registries-2](images/dockerhub-registries-2.png)
+
+    You now can see the `s390x` tag alongside `latest`. These are two separate container images named `nginx-cuva` in the same Container Registry - demarcated by their tags.
+
+    At this point, if you wanted to deploy this application to either an `amd64` or `s390x` server or OpenShift cluster, you would need to specify which tag to deploy. In order to more fully adopt the hybrid multi-archicture model, you want to build a *Container Manifest* that acts as a wrapper around these two container images and will automatically select which tag to deploy after identifying the target environment.
+
+28. Create a container manifest.
+
+    ```text
+    podman manifest create docker.io/your_dockerhub_username/nginx-cuva:manifest
+    ```
+
+29. Add the two container images to the manifest.
+
+    ```text
+    podman manifest add docker.io/your_dockerhub_username/nginx-cuva:manifest docker.io/your_dockerhub_username/nginx-cuva:latest
+    podman manifest add docker.io/your_dockerhub_username/nginx-cuva:manifest docker.io/your_dockerhub_username/nginx-cuva:s390x
+    ```
+
+30. Inspect the manifest to see that it references each architecture image.
+
+    ```text
+    podman manifest inspect docker.io/your_dockerhub_username/nginx-cuva:manifest
+    ```
+
+    Sample output:
+    ```text
+    ➜  podman-intro git:(main) ✗ podman manifest inspect docker.io/mondicsmatt/nginx-cuva:manifest
+    {
+        "schemaVersion": 2,
+        "mediaType": "application/vnd.docker.distribution.manifest.list.v2+json",
+        "manifests": [
+            {
+                "mediaType": "application/vnd.oci.image.manifest.v1+json",
+                "size": 1851,
+                "digest": "sha256:befa7415d5689419f8775a6bf1207a0ed8d7068acc121f43acdf9f4bd0319f81",
+                "platform": {
+                    "architecture": "amd64",
+                    "os": "linux"
+                }
+            },
+            {
+                "mediaType": "application/vnd.oci.image.manifest.v1+json",
+                "size": 1851,
+                "digest": "sha256:9a29cb4cd8307aa9f404645472bf8d7995c75208dae9e6eb3afb3b1f30813d28",
+                "platform": {
+                    "architecture": "s390x",
+                    "os": "linux"
+                }
+            }
+        ]
+    }
+    ```
+
+31. Push the container manifest to your DockerHub registry.
+
+    ```text
+    podman push docker.io/your_dockerhub_username/nginx-cuva:manifest
+    ```
+
+32. Finally, navigate to your DockerHub registry in a web browser, and navigate to the "Tags" tab.
+
+    ![dockerhub-manifest](images/dockerhub-manifest.png)
+
+    You should see two different architectures listed for the *manifest* tag. 
+
+Your multi-architecture container manifest can be deployed onto any x86 or IBM zSystems server or OpenShift cluster without needing to pick a specific tag. The container runtime on that server or cluster will identify and pull the appropriate container image.
+
+## Conclusion
+
+In this tutorial, you have learned about containers, images, registries, and how to build and run them on various platform architectures. To build on this knowledge, you may be interested in learning about [Kubernetes](https://kubernetes.io/) - the defacto container orchestrator that will help manage large numbers of containers, or [OpenShift](https://www.redhat.com/en/technologies/cloud-computing/openshift), the Kubernetes-based container platform that is the foundation of IBM and Red Hat's hybrid cloud strategy.
