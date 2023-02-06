@@ -64,7 +64,7 @@ As mentioned in the previous section, those who are familiar with Docker can qui
 
 One of the most important benefits of Podman over Docker is that Podman runs daemonless. The daemon which the Docker CLI interacts with introduces a single point of failure and a great target for security risk because the Docker daemon requires root privileges to manage containers. Podman running daemonless makes the architecture more secure, available, and simplified.
 
-Without a daemon, Podman interacts directly with `runc`, the container runtime that supports OCI-compliant comtainer images. OCI (`Open Container Initiative`) compliance means that Podman containers and iaages adopt open standards and governance around container formats and runtimes. OCI was established by Docker, and Docker images are OCI-compliant. To the end user, this means that any image you built with Docker will also run with Podman, and vice-versa.
+Without a daemon, Podman interacts directly with `runc`, the container runtime that supports OCI-compliant container images. OCI (`Open Container Initiative`) compliance means that Podman containers and images adopt open standards and governance around container formats and runtimes. OCI was established by Docker, and Docker images are OCI-compliant. To the end user, this means that any image you built with Docker will also run with Podman, and vice-versa.
 
 Podman also runs rootless by default. This means that you can run rootless containers without any additional configuration - and root or non-root user can use Podman to run containers. Docker has introduced this ability as time went on, but it does require additional configuration.
 
@@ -79,7 +79,7 @@ Lastly, Podman supports the concept of deploying multiple containers in one Pod.
 Some of the popular container registries are:
 - DockerHub
 - quay.io
-- IBM Container Regisry (icr)
+- IBM Container Registry (icr)
 
 Container Registries often store multiple versions of the Container Image - denoted by *tags*. For example, you can look at the tags for the official `nginx` container image in DockerHub.
 
@@ -107,13 +107,13 @@ Where:
 
     Enter your Docker credentials when prompted.
 
-    Logging in to DockerHub is required to push images into your own repositores, which is a later step in this tutorial.
+    Logging in to DockerHub is required to push images into your own repositories, which is a later step in this tutorial.
 
 ## Pulling Container Images
 
 Pulling Container Images to your local machine (or whichever machine you are running the Podman CLI from) is quite easy, which you will see in this section.
 
-The configuration file for which registries Podman can access is located at `/etc/containers/registries.conf`. Note that while Podman supports Mac and Windows, on these operating systems it embeds a guest Linux system to launch your containers. This guest is referred to as a Podman machine and is managed with the `podman machine` command. On Mac and Windows, you can check the `registries.conf` file with the command `podman machine ssh cat /etc/conftainers/registries.conf`.
+The configuration file for which registries Podman can access is located at `/etc/containers/registries.conf`. Note that while Podman supports Mac and Windows, on these operating systems it embeds a guest Linux system to launch your containers. This guest is referred to as a Podman machine and is managed with the `podman machine` command. On Mac and Windows, you can check the `registries.conf` file with the command `podman machine ssh cat /etc/containers/registries.conf`.
 
 2. Pull the official Nginx Container Image to your local machine.
 
@@ -185,7 +185,7 @@ Now that you have a container image stored locally, the next step is to run it a
 
     Finally, you specify the container image which you would like to run. Again, you could have instead used the unique Image ID rather than the full name. 
 
-    You also could have immedietely executed this `podman run` command without first executing the `podman pull`. Podman would have pulled the container image automatically from a container registry if it was not found locally.
+    You also could have immediately executed this `podman run` command without first executing the `podman pull`. Podman would have pulled the container image automatically from a container registry if it was not found locally.
 
 6. In a web browser, navigate to <localhost:8080> to see your nginx service running.
 
@@ -197,7 +197,7 @@ Now that you have a container image stored locally, the next step is to run it a
 
 ## Building a New Container Image
 
-7. Clone this GitHub repository which containes a files for the Cuyahoga Valley National Park website.
+1. Clone this GitHub repository which contains files for the Cuyahoga Valley National Park website.
 
     ```text
     git clone https://github.com/mmondics/podman-intro
@@ -226,7 +226,7 @@ Now that you have a container image stored locally, the next step is to run it a
 
 **Containerfiles** are text files that are used to build new container images. They are an extremely flexible, reusable, and extensible way to make changes to existing "parent" container images such as a simple Linux distribution, or in the case of this tutorial, a base nginx server. Containerfiles allow their users to pull the existing parent image, make any changes necessary, and build a new customized "child" image.
 
-If you're familiar with Docker, you can think of a *Containerfile* as analagous to a *Dockerfile*. They have identical structure and use. *Containerfile* is simply the nomenclature used by OCI-compliant containerization tools including Podman.
+If you're familiar with Docker, you can think of a *Containerfile* as analogous to a *Dockerfile*. They have identical structure and use. *Containerfile* is simply the nomenclature used by OCI-compliant containerization tools including Podman.
 
 9. Open the `Containerfile` with your favorite editor (`vi`, `nano`, VSCode, TextEdit, etc.)
 
@@ -255,12 +255,12 @@ If you're familiar with Docker, you can think of a *Containerfile* as analagous 
 
     This Containerfile is essentially a sequential list of instructions that will be run in series to create the child container image. This is a relatively simple Containerfile with *some* of the supported instructions, which are outlined below.
 
-    - `FROM`: specifies the parent container image to build from. If the image exists locally, that image is used which avoids the need for a `podman pull`, and will speed up the process of the container image biild. If it does not exist locally, podman will look at the registries it knows about (via the configuration file mentioned earlier) and pulls it locally. You can also specify which registry to pull the parent image from by simply prepending the registry like you did earlier, i.e. `docker.io/library/nginx:latest`.
-    - LABEL: adds a key-label pair to the metadata of the child container image. These are helpful to provide information to the eventual users of the image (maintainer contacts, software versions, etc) as well as help to keep your container images organized. 
-    - ENV: sets environment variables in the child container. The variables you set with `ENV` will be visible (with the `env` command) and usable in the eventual container.
-    - EXPOSE: simply specifies the port on which the container will listen. This *does not* actually expose the port - it only adds the correct port to the image metadata. You expose the port when running the container with `podman run -p`
-    - COPY: copies files from the local directory where the Containerfile is to a target directory in the container image. Another option to do so is the `ADD` instruction which has the additional benefit of adding files from other locations (different servers or the internet) as well as unpacking `.tar` files in the target directory. Neither of these benefits are supported by the `COPY` instruction.
-    - RUN: executes the following commands within the child container image
+    - `FROM`: specifies the parent container image to build from. If the image exists locally, that image is used which avoids the need for a `podman pull` and will speed up the process of the container image build. If it does not exist locally, podman will look at the registries it knows about (via the configuration file mentioned earlier) and pulls it locally. You can also specify which registry to pull the parent image from by simply prepending the registry like you did earlier, i.e. `docker.io/library/nginx:latest`.
+    - `LABEL`: adds a key-label pair to the metadata of the child container image. These are helpful to provide information to the eventual users of the image (maintainer contacts, software versions, etc) as well as help to keep your container images organized. 
+    - `ENV`: sets environment variables in the child container. The variables you set with `ENV` will be visible (with the `env` command) and usable in the eventual container.
+    - `EXPOSE`: simply specifies the port on which the container will listen. This *does not* actually expose the port - it only adds the correct port to the image metadata. You expose the port when running the container with `podman run -p`
+    - `COPY`: copies files from the local directory where the Containerfile is to a target directory in the container image. Another option to do so is the `ADD` instruction which has the additional benefit of adding files from other locations (different servers or the internet) as well as unpacking `.tar` files in the target directory. Neither of these benefits are supported by the `COPY` instruction.
+    - `RUN`: executes the following commands within the child container image
 
 Each one of these instructions forms a new *layer* within the child image. When you pulled the parent nginx image earlier, each one of the "blobs" you saw represents one layer of the image. The layered approach that Podman uses enables rapid changes and updates without the need for the full image to be pushed and pulled. For example, if you edit only one of the instructions in the Containerfile, such as modifying the `RUN` instruction, only that blob will need to be pushed or pulled into or out of the registry the next time it's used. In the modern DevSecOps world where images are rapidly changing and evolving, this greatly increases the speed of development and also cuts down on storage requirements. 
 
@@ -339,9 +339,9 @@ Because of this layered approach, it generally makes sense to combine `RUN` inst
 
 15. Navigate to <localhost:8080> in a web browser.
 
-    ![nginx-cuva](nginx-cuva.png)
+    ![nginx-cuva](/images/nginx-cuva.png)
 
-The entire website with all images, links, pages, etc are running in your single container. This is not the most microservices-friendly example - most organizations will have multiple containers running separate components of their application so that if one components goes down, it will be isolated to just that component and not affect the others.
+The entire website with all images, links, pages, etc are running in your single container. This is not the most microservices-friendly example - most organizations will have multiple containers running separate components of their application so that if one component goes down, it will be isolated to just that component and not affect the others.
 
 This container image is only running locally. If you'd like to share it with others, or run it on a server elsewhere, you can push it to a container registry.
 
@@ -373,7 +373,7 @@ Remember that your container image is tagged with the `localhost` registry. This
     docker.io/library/nginx           latest      a99a39d070bf  3 weeks ago   146 MB
     ```
 
-    Notice that the re-tagged image has the same `IMAGE ID`. Re-tagging images is simply used to move them to and from registries - but it is the idential container under the hood.
+    Notice that the re-tagged image has the same `IMAGE ID`. Re-tagging images is simply used to move them to and from registries - but it is an identical container under the hood.
 
 18. Push the re-tagged image to your DockerHub registry.
 
@@ -408,7 +408,7 @@ Remember that your container image is tagged with the `localhost` registry. This
 
     Your image is now publicly accessible in DockerHub and can be pulled into Linux servers or Kubernetes cluster.
 
-20. Click the tile for you container image to see more details.
+20. Click the tile for your container image to see more details.
 
     ![dockerhub-details](images/dockerhub-details.png)
 
@@ -422,13 +422,13 @@ Building a multi-architecture container image, or Container Manifest, enables th
 - Failing over from public cloud or x86 to IBM zSystems environments for disaster recovery
 - Migrating applications to different architectures for performance, sustainability, or availability purposes
 
-Podman supports builds for platform architectures different from that of the Podman host. For example, you can build an `s390x` container image from an `amd64` linux server or even your local laptop or desktop. This is particularly beneficial to developers or DevOps pipelines who don't have access to each of the target architectures for development.
+Podman supports builds for platform architectures different from that of the Podman host. For example, you can build an `s390x` container image from an `amd64` Linux server or even your local laptop or desktop. This is particularly beneficial to developers or DevOps pipelines who don't have access to each of the target architectures for development.
 
-Building a container image for a different architecutre can be achieved by running a `podman build` with the `--platform` flag. Alternatively, the `--all-platforms` flag can be used to build for all platform architectures supported by the *parent image* in a Containerfile.
+Building a container image for a different architecture can be achieved by running a `podman build` with the `--platform` flag. Alternatively, the `--all-platforms` flag can be used to build for all platform architectures supported by the *parent image* in a Containerfile.
 
 While `podman build` is happy to use base images and build images for any platform that exists, `RUN` instructions in a Containerfile will not be able to succeed without the help of emulation provided by packages like `qemu-user-static`. [source and more information](https://docs.podman.io/en/latest/markdown/podman-build.1.html)
 
-[QEMU](https://www.qemu.org/) (short for Quick Emulator) is a free and open source emulator that emulators machine processors through dynamic binary translation to allow interoperability of guest operating systems. QEMU allows podman to not only *build* container images for different platforms, but also allows you to *run* different platform images.
+[QEMU](https://www.qemu.org/) (short for Quick Emulator) is a free and open-source emulator that emulators machine processors through dynamic binary translation to allow interoperability of guest operating systems. QEMU allows podman to not only *build* container images for different platforms, but also allows you to *run* different platform images.
 
 21. Install the `qemu-user-static` package onto your local podman machine.
 
@@ -503,7 +503,7 @@ While `podman build` is happy to use base images and build images for any platfo
 
     You now can see the `s390x` tag alongside `latest`. These are two separate container images named `nginx-cuva` in the same Container Registry - demarcated by their tags.
 
-    At this point, if you wanted to deploy this application to either an `amd64` or `s390x` server or OpenShift cluster, you would need to specify which tag to deploy. In order to more fully adopt the hybrid multi-archicture model, you want to build a *Container Manifest* that acts as a wrapper around these two container images and will automatically select which tag to deploy after identifying the target environment.
+    At this point, if you wanted to deploy this application to either an `amd64` or `s390x` server or OpenShift cluster, you would need to specify which tag to deploy. In order to more fully adopt the hybrid multi-architecture model, you want to build a *Container Manifest* that acts as a wrapper around these two container images and will automatically select which tag to deploy after identifying the target environment.
 
 28. Create a container manifest.
 
