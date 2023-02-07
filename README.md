@@ -50,6 +50,8 @@ In short, an end user uses Podman to run a Container Image as a Container on any
 
 ## Podman Overview
 
+![podman-logo](images/podman-logo.svg)
+
 Podman is an open-source project that is available on most Linux platforms and resides on GitHub. Podman is a daemonless container engine for developing, managing, and running Open Container Initiative (OCI) containers and container images on your Linux System. Podman provides a Docker-compatible command line front end that can simply alias the Docker cli, alias docker=podman. Podman also provides a socket activated REST API service to allow remote applications to launch on-demand containers. This REST API also supports the Docker API, allowing users of docker-py and docker-compose to interact with the Podman as a service.
 
 Containers under the control of Podman can either be run by root or by a non-privileged user. Podman manages the entire container ecosystem which includes pods, containers, container images, and container volumes using the libpod library. Podman specializes in all of the commands and functions that help you to maintain and modify OCI container images, such as pulling and tagging. It allows you to create, run, and maintain those containers created from those images in a production environment.
@@ -197,7 +199,7 @@ Now that you have a container image stored locally, the next step is to run it a
 
 ## Building a New Container Image
 
-1. Clone this GitHub repository which contains files for the Cuyahoga Valley National Park website.
+7. Clone this GitHub repository which contains files for the Cuyahoga Valley National Park website.
 
     ```text
     git clone https://github.com/mmondics/podman-intro
@@ -432,7 +434,7 @@ While `podman build` is happy to use base images and build images for any platfo
 
 21. Install the `qemu-user-static` package onto your local podman machine.
 
-    ``text
+    ```text
     podman machine ssh sudo rpm-ostree install qemu-user-static
     ```
 
@@ -485,7 +487,7 @@ While `podman build` is happy to use base images and build images for any platfo
 
     Note: you might receive a warning from Podman telling you that the container architecture does not match that of the Podman host. This can be ignored.
 
-25. Navigate to <localhost:8081> in a web browser.
+25. Navigate to <http://localhost:8081> in a web browser.
 
     ![nginx-cuva-s390x](images/nginx-cuva-s390x.png)
 
