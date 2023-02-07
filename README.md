@@ -339,7 +339,7 @@ Because of this layered approach, it generally makes sense to combine `RUN` inst
     podman run -d -p 8080:80 localhost/nginx-cuva:latest
     ```
 
-15. Navigate to <localhost:8080> in a web browser.
+15. Navigate to <http://localhost:8080> in a web browser.
 
     ![nginx-cuva](/images/nginx-cuva.png)
 
