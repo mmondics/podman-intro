@@ -278,10 +278,10 @@ Because of this layered approach, it generally makes sense to combine `RUN` inst
     While in the `podman-intro` directory which contains the `Containerfile`:
 
     ```text
-    podman build -t localhost:nginx-cuva .
+    podman build -t localhost/nginx-cuva .
     ```
 
-    In the command above, the `-t` flag is used to set the registry and image name as `localhost:nginx-cuva`, and the `.` simply says to build from the current directory. Because you did not specify a tag for the image, `latest` will be provided as the default.
+    In the command above, the `-t` flag is used to set the registry and image name as `localhost/nginx-cuva`, and the `.` simply says to build from the current directory. Because you did not specify a tag for the image, `latest` will be provided as the default.
 
     Sample output:
     ```text
