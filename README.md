@@ -330,7 +330,7 @@ Because of this layered approach, it generally makes sense to combine `RUN` inst
 13. If your parent nginx container is still running, stop it first. You cannot have two pods trying to use the same port on one system.
 
     ```text
-    podman stop docker.io/library/nginx:latest
+    podman stop nginx
     ```
 
 14. Run the new container image.
