@@ -416,7 +416,7 @@ Remember that your container image is tagged with the `localhost` registry. This
 
 ## (optional) Building Multi-Architecture Container Images
 
-The remainder of this lab will work if you're running Podman on a Mac. Windows *should* work, but has not been tested. It will not work if you're running Podman on a RHEL virtual machine. If you're using RHEL, feel free to simply read through these instructions to see the process. 
+**The remainder of this lab will work if you're running Podman on a Mac. Windows *should* work, but has not been tested. It will not work if you're running Podman on a RHEL virtual machine. If you're using RHEL, feel free to simply read through these instructions to see the process.**
 
 In the hybrid multicloud world we are now living in, there is a great benefit to developing new applications with the mentality of "Build Once, Deploy Anywhere". It is far better to develop an application one time and be able to run it on any platform - IBM zSystems, IBM Power, x86, public cloud - rather than having to re-write the application for any new architecture that is brought into an environment. 
 
@@ -434,13 +434,13 @@ While `podman build` is happy to use base images and build images for any platfo
 
 [QEMU](https://www.qemu.org/) (short for Quick Emulator) is a free and open-source emulator that emulators machine processors through dynamic binary translation to allow interoperability of guest operating systems. QEMU allows podman to not only *build* container images for different platforms, but also allows you to *run* different platform images.
 
-1.  Install the `qemu-user-static` package onto your local podman machine.
+21.  Install the `qemu-user-static` package onto your local podman machine.
 
     ```text
     podman machine ssh sudo rpm-ostree install qemu-user-static
     ```
 
-2.  Reboot your podman machine.
+22.  Reboot your podman machine.
 
     ```text
     podman machine ssh sudo systemctl reboot
@@ -450,7 +450,7 @@ While `podman build` is happy to use base images and build images for any platfo
 
     Once Podman has rebooted, you can move on to building a `s390x` version of your container image. You can check that Podman is back up by running `podman images`. If you receive an error, the Podman machine is not back up yet.
 
-3.  Use the qemu emulator to build an `s390x` version of the customized nginx container image. Remember to edit the command below to reflect `your_dockerhub_username`.
+23.  Use the qemu emulator to build an `s390x` version of the customized nginx container image. Remember to edit the command below to reflect `your_dockerhub_username`.
 
     ```text
     podman build --platform=linux/s390x -t docker.io/your_dockerhub_username/nginx-cuva:s390x .
@@ -481,7 +481,7 @@ While `podman build` is happy to use base images and build images for any platfo
     67f223fd1febef947fe4283764c858e50efcc9e1d0c4fe0c97f2965094a8a2b0
     ```
 
-4.  Run the `s390x` container image on port 8081 so it doesn't try to use the same port as your original container.
+24.  Run the `s390x` container image on port 8081 so it doesn't try to use the same port as your original container.
 
     ```text
     podman run -d -p 8081:80 docker.io/your_dockerhub_username/nginx-cuva:s390x
@@ -489,19 +489,19 @@ While `podman build` is happy to use base images and build images for any platfo
 
     Note: you might receive a warning from Podman telling you that the container architecture does not match that of the Podman host. This can be ignored.
 
-5.  Navigate to <http://localhost:8081> in a web browser.
+25.  Navigate to <http://localhost:8081> in a web browser.
 
     ![nginx-cuva-s390x](images/nginx-cuva-s390x.png)
 
     You should notice that the webpage now displays `Cuyahoga Valley running on s390x`. This is the result of the `RUN` command identifying the container's host architecture and injecting it into the `index.html` page served by the nginx server. You're now running the container on an emulated `s390x` operating system on your laptop or desktop, but this container could be run on any Linux on IBM zSystems server as well as in z/OS Container Extensions as well as OpenShift on IBM zSystems.
 
-6.  Push the s390x container image to your DockerHub repository.
+26.  Push the s390x container image to your DockerHub repository.
 
     ```text
     podman push docker.io/your_dockerhub_username/nginx-cuva:s390x
     ```
 
-7.  Navigate back to your DockerHub repository in a web browser to see the pushed image.
+27.  Navigate back to your DockerHub repository in a web browser to see the pushed image.
 
     ![dockerhub-registries-2](images/dockerhub-registries-2.png)
 
@@ -509,20 +509,20 @@ While `podman build` is happy to use base images and build images for any platfo
 
     At this point, if you wanted to deploy this application to either an `amd64` or `s390x` server or OpenShift cluster, you would need to specify which tag to deploy. In order to more fully adopt the hybrid multi-architecture model, you want to build a *Container Manifest* that acts as a wrapper around these two container images and will automatically select which tag to deploy after identifying the target environment.
 
-8.  Create a container manifest.
+28.  Create a container manifest.
 
     ```text
     podman manifest create docker.io/your_dockerhub_username/nginx-cuva:manifest
     ```
 
-9.  Add the two container images to the manifest.
+29.  Add the two container images to the manifest.
 
     ```text
     podman manifest add docker.io/your_dockerhub_username/nginx-cuva:manifest docker.io/your_dockerhub_username/nginx-cuva:latest
     podman manifest add docker.io/your_dockerhub_username/nginx-cuva:manifest docker.io/your_dockerhub_username/nginx-cuva:s390x
     ```
 
-10. Inspect the manifest to see that it references each architecture image.
+30. Inspect the manifest to see that it references each architecture image.
 
     ```text
     podman manifest inspect docker.io/your_dockerhub_username/nginx-cuva:manifest
@@ -557,13 +557,13 @@ While `podman build` is happy to use base images and build images for any platfo
     }
     ```
 
-11. Push the container manifest to your DockerHub registry.
+31. Push the container manifest to your DockerHub registry.
 
     ```text
     podman push docker.io/your_dockerhub_username/nginx-cuva:manifest
     ```
 
-12. Finally, navigate to your DockerHub registry in a web browser, and navigate to the "Tags" tab.
+32. Finally, navigate to your DockerHub registry in a web browser, and navigate to the "Tags" tab.
 
     ![dockerhub-manifest](images/dockerhub-manifest.png)
 
