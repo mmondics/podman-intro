@@ -1,4 +1,4 @@
-FROM nginx:latest
+FROM docker.io/nginx:latest
 
 LABEL description='This Containerfile will customize the parent nginx container image'
 
