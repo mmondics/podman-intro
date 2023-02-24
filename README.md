@@ -383,7 +383,7 @@ Remember that your container image is tagged with the `localhost` registry. This
     podman push docker.io/your_dockerhub_username/nginx-cuva:latest
     ```
 
-    Again, remember to change `your_dockerhub_username`.
+    Again, remember to change `your_dockerhub_username`. If you receive an error that contains `requested access to the resource is denied`, make sure that you are logged into `docker.io` with the Podman CLI. Refer to step #1 in this tutorial.
 
     Sample output:
 
